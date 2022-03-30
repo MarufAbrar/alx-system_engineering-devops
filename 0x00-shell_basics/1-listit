@@ -1,2 +1,2 @@
-#!/bin/basf
+#!/bin/bash
 ls
