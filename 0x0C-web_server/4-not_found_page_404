@@ -1,11 +1,22 @@
 #!/usr/bin/env bash
-# configures an Nginx server to have a custom 404 page that contains the string 'Ceci n'est pas une page'
-
-apt-get -y update
+# Install nginx and start it
 apt-get -y install nginx
+
+# Firewall setting: Allow Nginx to serve on HTTP
 ufw allow 'Nginx HTTP'
-echo 'Holberton School' > /var/www/html/index.nginx-debian.html
-sed -i '/listen 80 default_server;/a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
-echo "Ceci n'est pas une page" > /usr/share/nginx/html/custom_404.html
-sed -i '/server_name _;/a error_page 404 /custom_404.html;\nlocation = /custom_404.html {\nroot /usr/share/nginx/html;\ninternal;\n}' /etc/nginx/sites-available/default
+
+# Create a new index.html file that will be used over the default index.nginx-debian.html
+echo "Holberton School" >> /var/www/html/index.html
+
+#Give the user  ownership to website files
+chown -R $USER:$USER /var/www/html
+chmod -R 755 /var/www
+
+# Redirect to /redirect_me to a youtube video
+sed -i '37i\rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+
+# Setup 404 page
+echo "Ceci n'est pas une page\n" >> /var/www/html/error_404.html
+sed -i '38i\error_page 404 /error_404.html;' /etc/nginx/sites-available/default
+
 service nginx start
