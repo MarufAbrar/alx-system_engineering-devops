@@ -1,9 +1,12 @@
-#!/usr/bin/env bash
-# Install nginx and start it
-sudo apt-get update
-apt-get -y install nginx
-service nginx start
-ufw allow 'Nginx HTTP'
-echo 'Hello World!' > /var/www/html/index.html
-# echo "JPS School\n" | sudo tee /var/www/html/index.nginx-debian.html
-service nginx start
+# #!/usr/bin/env bash
+# # Install nginx and start it
+# sudo apt-get update
+# apt-get -y install nginx
+# # service nginx start
+# # ufw allow 'Nginx HTTP'
+# echo 'Hello World!' > /var/www/html/index.html
+# # echo "JPS School\n" | sudo tee /var/www/html/index.nginx-debian.html
+# service nginx start
+
+sudo apt-get update 
+sudo apt-get install nginx
