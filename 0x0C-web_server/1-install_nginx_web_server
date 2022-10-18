@@ -3,7 +3,15 @@
 # print "Hello World"
 sudo apt-get update
 sudo apt-get -y install nginx
+ufw allow 'Nginx HTTP'
 echo 'Hello World!' > /var/www/html/index.html
 service nginx restart
-curl /
-Hello world!
+server {
+    listen 80;
+
+    location / {
+        add_header Content-Type text/html;
+
+        return 200 'Hello World!';
+    }
+}
