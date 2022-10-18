@@ -2,9 +2,9 @@
 # installs nginx and configure it to listen on port 80
 sudo apt-get update
 sudo apt-get -y install nginx
+sudo service nginx start
 ufw allow 'Nginx HTTP'
 echo 'Hello World!' > /var/www/html/index.html
-service nginx start
 server {
     listen      80;
     server_name "";
@@ -15,4 +15,4 @@ server {
     }
     return 'Hello World!';
 }
-service nginx restart
+sudo service nginx restart
