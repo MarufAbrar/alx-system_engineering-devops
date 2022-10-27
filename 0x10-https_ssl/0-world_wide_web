@@ -1,22 +1,44 @@
 #!/usr/bin/env bash
-# After configuring domain zone, use this script to output where each subdomain points to
-runDig () {
-    subarg=$1
-    urlarg=$2
+# Configure my domain zone:
+# www --> 41372-lb-01 107.22.141.204
+# web-01 --> 41372-web-01 52.91.182.79
+# web-02 --> 41372-web-02 34.203.33.173
 
-    dig "$subarg.$urlarg" | grep -A1 'ANSWER SECTION:' | tail -1 | awk -v s="$subarg" 'BEGIN { FS = " " } ; { print "The subdomain " s " is a " $4 " record and points to " $5 }'
+# -- To be evaluated --
+# domain_information () {
+#     line=$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:' | tr '\t' '\n' | tail -2 | tr '\n' ' ')
+#     echo "$2 $line" | awk '{print "The subdomain " $1 " is a " $2 " record and points to " $3}'
+# }
+
+# if [ "$#" == 1 ]
+# then
+#   domain_information "$1" "www"
+#   domain_information "$1" "lb-01"
+#   domain_information "$1" "web-01"
+#   domain_information "$1" "web-02"
+# elif [ "$#" == 2 ]
+# then
+#   domain_information "$1" "$2"
+# fi
+#-- To be evaluated --
+
+subdomains_all=( "www" "lb-01" "web-01" "web-02" )
+
+runDig () {
+    subdomain=$1
+    domain=$2
+
+    dig "$subdomain.$domain" | grep -A1 'ANSWER SECTION:' | tail -1 | awk -v s="$subdomain" 'BEGIN { FS = " " } ; { print "The subdomain " s " is a " $4 " record and points to " $5 }'
 }
 
-allSubs=( "www" "lb-01" "web-01" "web-02" )
-
 if [ $# -eq 1 ]; then
-    url="$1"
-    for s in "${allSubs[@]}"
+    domain="$1"
+    for i in "${subdomains_all[@]}"
     do
-	runDig "$s" "$url"
+	runDig "$i" "$domain"
     done
 elif [ $# -eq 2 ]; then
-    url="$1"
-    sub="$2"
-    runDig "$sub" "$url"
+    domain="$1"
+    subdomain="$2"
+    runDig "$subdomain" "$domain"
 fi
