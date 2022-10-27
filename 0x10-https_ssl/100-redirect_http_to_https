@@ -1,0 +1,35 @@
+global
+    	log     /dev/log local0
+    	maxconn 2048
+    	user    haproxy
+    	group   haproxy
+    	tune.ssl.default-dh-param 2048
+
+defaults
+    	log     global
+    	mode    http
+    	option  httplog
+    	option  dontlognull
+    	retries 3
+    	option  redispatch
+    	timeout connect  5000
+    	timeout client  10000
+    	timeout server  10000
+    	option  forwardfor
+    	option  http-server-close
+
+frontend  samsonairbnb-frontend-http
+        bind *:80
+	redirect scheme https code 301 if !{ ssl_fc }
+        http-request set-header X-Forwarded-Proto http
+	default_backend samsonairbnb-backend
+
+frontend  samsonairbnb-frontend-https
+        bind *:443 ssl crt /etc/ssl/www.samsonairbnb.tech/www.samsonairbnb.tech.pem
+        http-request set-header X-Forwarded-Proto https
+        default_backend samsonairbnb-backend
+
+backend samsonairbnb-backend
+        balance roundrobin
+        server 335-web-01 34.138.119.98:80 check
+        server 335-web-02 3.236.71.225:80 check
