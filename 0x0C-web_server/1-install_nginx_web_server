@@ -1,7 +1,18 @@
 #!/usr/bin/env bash
-# Install nginx and start it
-apt-get -y install nginx
-service nginx start
+# installs nginx and configure it to listen on port 80
+sudo apt-get update
+sudo apt-get -y install nginx
+sudo service nginx start
 ufw allow 'Nginx HTTP'
-echo "Holberton School\n" | sudo tee /var/www/html/index.nginx-debian.html
-service nginx restart
+echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html
+server {
+    listen      80;
+    server_name "";
+    
+    location / {
+
+        return 200 'Hello World!';
+    }
+    return 'Hello World!';
+}
+sudo service nginx restart
