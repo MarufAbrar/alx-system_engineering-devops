@@ -1,3 +1,3 @@
 # 0x13-firewall
 
-In this project, I learnt how to configure firewall to searvers.
+0x13-firewall task november 10,8,22
