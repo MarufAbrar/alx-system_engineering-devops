@@ -1,0 +1,32 @@
+# Configures Nginx to serve page from the locations 
+#          /airbnb-onepage/
+#          /airbnb-dynamic/number_odd_or_even/(any number)
+#          /api/
+#          /web_dynamic/2-hbnb
+server {
+    listen      80 default_server;
+    listen      [::]:80 default_server;
+
+    server_name 34.138.119.98;
+    add_header  X-Served-By 945-web-01;
+
+    location = /airbnb-onepage/ {
+       proxy_pass http://127.0.0.1:5000/airbnb-onepage/;
+    }
+
+    location ~ /airbnb-dynamic/number_odd_or_even/(\d+)$ {
+       proxy_pass http://127.0.0.1:5001/number_odd_or_even/$1;
+    }
+
+    location /api/ {
+       proxy_pass http://127.0.0.1:5002/api/;
+    }
+
+    location / {
+       proxy_pass http://127.0.0.1:5003/2-hbnb;
+    }
+
+    location /static/ {
+       alias /home/ubuntu/AirBnB_clone_v4/web_dynamic/static/;
+    }
+}
